@@ -11,10 +11,13 @@ FPGA芯片：altera Cyclone VI
 
 项目规模：4000 个逻辑单元， 200,000 bit RAM
 
-目标说明：
+目录说明：
 
-rtl/       项目Verilog源代码目录
+rtl/           项目Verilog源代码目录
 
-doc/       设计文档目录
+doc/           设计文档目录
 
-azpr_asm/  运行在目标cpu上的汇编代码示例及编译器 
+azpr_asm/      运行在目标cpu上的汇编代码示例及编译器 
+
+注：初始源代码来自《CPU自制入门》xilinux芯片移植
+
