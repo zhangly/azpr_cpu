@@ -1,0 +1,170 @@
+-- Copyright (C) 1991-2011 Altera Corporation
+-- Your use of Altera Corporation's design tools, logic functions 
+-- and other software and tools, and its AMPP partner logic 
+-- functions, and any output files from any of the foregoing 
+-- (including device programming or simulation files), and any 
+-- associated documentation or information are expressly subject 
+-- to the terms and conditions of the Altera Program License 
+-- Subscription Agreement, Altera MegaCore Function License 
+-- Agreement, or other applicable license agreement, including, 
+-- without limitation, that your use is for the sole purpose of 
+-- programming logic devices manufactured by Altera and sold by 
+-- Altera or its authorized distributors.  Please refer to the 
+-- applicable agreement for further details.
+
+-- Quartus II generated Memory Initialization File (.mif)
+
+WIDTH=32;
+DEPTH=256;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+1	:	10000000	;
+2	:	0c010000	;
+3	:	3c210010	;
+4	:	0c210184	;
+5	:	0c020000	;
+6	:	3c420010	;
+7	:	0c4201bc	;
+8	:	0c030000	;
+9	:	3c630010	;
+10	:	0c6301ec	;
+11	:	0c040000	;
+12	:	3c840010	;
+13	:	0c84021c	;
+14	:	54200000	;
+15	:	00000000	;
+16	:	0c148000	;
+17	:	3e940010	;
+18	:	0c150002	;
+19	:	3eb50010	;
+20	:	0eb5ffff	;
+21	:	5e950004	;
+22	:	54800000	;
+23	:	00000000	;
+24	:	0c100015	;
+25	:	54400000	;
+26	:	00000000	;
+27	:	10a52800	;
+28	:	54600000	;
+29	:	00000000	;
+30	:	0c060001	;
+31	:	42060008	;
+32	:	00000000	;
+33	:	0c100006	;
+34	:	54400000	;
+35	:	00000000	;
+36	:	0c062000	;
+37	:	3cc60010	;
+38	:	50c00000	;
+39	:	00000000	;
+40	:	54600000	;
+41	:	00000000	;
+42	:	08103800	;
+43	:	54600000	;
+44	:	00000000	;
+45	:	08104000	;
+46	:	0c090080	;
+47	:	114a5000	;
+48	:	116b5800	;
+49	:	54600000	;
+50	:	00000000	;
+51	:	21705800	;
+52	:	3e100018	;
+53	:	08106000	;
+54	:	54600000	;
+55	:	00000000	;
+56	:	21705800	;
+57	:	3e100010	;
+58	:	09906000	;
+59	:	54600000	;
+60	:	08000000	;
+61	:	21705800	;
+62	:	3e100008	;
+63	:	09906000	;
+64	:	54600000	;
+65	:	08000000	;
+66	:	21705800	;
+67	:	09906000	;
+68	:	0c0d2000	;
+69	:	3dad0010	;
+70	:	3cae0007	;
+71	:	21ca7000	;
+72	:	21cd6800	;
+73	:	5dac0000	;
+74	:	254a0004	;
+75	:	4549ffe5	;
+76	:	00000000	;
+77	:	54600000	;
+78	:	00000000	;
+79	:	08106000	;
+80	:	20e83800	;
+81	:	0c0d00ff	;
+82	:	44ed000a	;
+83	:	00000000	;
+84	:	056b00ff	;
+85	:	458b0007	;
+86	:	00000000	;
+87	:	0c100006	;
+88	:	54400000	;
+89	:	00000000	;
+90	:	24a50001	;
+91	:	44000004	;
+92	:	00000000	;
+93	:	0c100015	;
+94	:	54400000	;
+95	:	00000000	;
+96	:	4000ffbb	;
+97	:	00000000	;
+98	:	0c106000	;
+99	:	3e100010	;
+100	:	5a110000	;
+101	:	06310001	;
+102	:	40110007	;
+103	:	00000000	;
+104	:	5a110004	;
+105	:	5a110000	;
+106	:	16310001	;
+107	:	5cd10000	;
+108	:	4400fff7	;
+109	:	00000000	;
+110	:	53e00000	;
+111	:	00000000	;
+112	:	0c116000	;
+113	:	3e310010	;
+114	:	5e300004	;
+115	:	5a320000	;
+116	:	06520002	;
+117	:	4012fffd	;
+118	:	00000000	;
+119	:	5a320000	;
+120	:	16520002	;
+121	:	5e320000	;
+122	:	53e00000	;
+123	:	00000000	;
+124	:	0c116000	;
+125	:	3e310010	;
+126	:	5a320000	;
+127	:	06520001	;
+128	:	4012fffb	;
+129	:	00000000	;
+130	:	5a300004	;
+131	:	5a320000	;
+132	:	16520001	;
+133	:	5e320000	;
+134	:	53e00000	;
+135	:	00000000	;
+136	:	0c108000	;
+137	:	3e100010	;
+138	:	5a110000	;
+139	:	4011fffe	;
+140	:	00000000	;
+141	:	5a110000	;
+142	:	4411fffe	;
+143	:	00000000	;
+144	:	53e00000	;
+145	:	00000000	;
+	[146..255]  :   00000000;
+END;
