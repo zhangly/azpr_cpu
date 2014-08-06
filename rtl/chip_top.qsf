@@ -1,0 +1,166 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2011 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II
+# Version 11.0 Build 157 04/27/2011 SJ Full Version
+# Date created = 21:34:39  June 19, 2014
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		chip_top_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE6E22C8
+set_global_assignment -name TOP_LEVEL_ENTITY chip_top
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 11.0
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "21:34:39  JUNE 19, 2014"
+set_global_assignment -name LAST_QUARTUS_VERSION 11.0
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name NOMINAL_CORE_SUPPLY_VOLTAGE 1.2V
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name SEARCH_PATH "c:\\altera\\projects\\azpr_cpu\\azpr_rtl\\io\\uart\\include"
+set_global_assignment -name SEARCH_PATH "c:\\altera\\projects\\azpr_cpu\\azpr_rtl\\io\\timer\\include"
+set_global_assignment -name SEARCH_PATH "c:\\altera\\projects\\azpr_cpu\\azpr_rtl\\io\\rom\\include"
+set_global_assignment -name SEARCH_PATH "c:\\altera\\projects\\azpr_cpu\\azpr_rtl\\io\\gpio\\include"
+set_global_assignment -name SEARCH_PATH "c:\\altera\\projects\\azpr_cpu\\azpr_rtl\\cpu\\include"
+set_global_assignment -name SEARCH_PATH "c:\\altera\\projects\\azpr_cpu\\azpr_rtl\\bus\\include"
+set_global_assignment -name SEARCH_PATH "c:\\altera\\projects\\azpr_cpu\\azpr_rtl\\top\\include"
+
+# assignment sys_rst_n and sys_clk pin
+set_location_assignment PIN_90 -to reset_sw
+set_location_assignment PIN_91 -to clk_ref
+
+# assignment UART rx and tx pin
+set_location_assignment PIN_138 -to uart_rx
+set_location_assignment PIN_136 -to uart_tx
+
+# assignment gpio_in[3:0] with key[3:0] 
+set_location_assignment PIN_23 -to gpio_in[0]
+set_location_assignment PIN_24 -to gpio_in[1]
+set_location_assignment PIN_25 -to gpio_in[2]
+set_location_assignment PIN_11 -to gpio_in[3]
+
+# assignment gpio_out[7:0] with LED[7:0]                                     
+set_location_assignment PIN_39 -to gpio_out[0]
+set_location_assignment PIN_31 -to gpio_out[1]
+set_location_assignment PIN_3 -to gpio_out[2]
+set_location_assignment PIN_2 -to gpio_out[3]
+set_location_assignment PIN_1 -to gpio_out[4]
+set_location_assignment PIN_144 -to gpio_out[5]
+set_location_assignment PIN_143 -to gpio_out[6]
+set_location_assignment PIN_142 -to gpio_out[7]
+
+# assignment gpio_out[17:8]
+set_location_assignment PIN_58 -to gpio_out[8]
+set_location_assignment PIN_55 -to gpio_out[9]
+set_location_assignment PIN_54 -to gpio_out[10]
+set_location_assignment PIN_53 -to gpio_out[11]
+
+set_location_assignment PIN_98 -to gpio_out[12]
+set_location_assignment PIN_99 -to gpio_out[13]
+set_location_assignment PIN_86 -to gpio_out[14]
+set_location_assignment PIN_87 -to gpio_out[15]
+set_location_assignment PIN_103 -to gpio_out[16]
+set_location_assignment PIN_104 -to gpio_out[17]
+
+# assignment gpio_io[15:0]
+set_location_assignment PIN_105 -to gpio_io[0]
+set_location_assignment PIN_106 -to gpio_io[1]
+set_location_assignment PIN_110 -to gpio_io[2]
+set_location_assignment PIN_111 -to gpio_io[3]
+set_location_assignment PIN_112 -to gpio_io[4]
+set_location_assignment PIN_113 -to gpio_io[5]
+set_location_assignment PIN_114 -to gpio_io[6]
+set_location_assignment PIN_115 -to gpio_io[7]
+set_location_assignment PIN_119 -to gpio_io[8]
+set_location_assignment PIN_120 -to gpio_io[9]
+set_location_assignment PIN_121 -to gpio_io[10]
+set_location_assignment PIN_124 -to gpio_io[11]
+set_location_assignment PIN_125 -to gpio_io[12]
+set_location_assignment PIN_126 -to gpio_io[13]
+set_location_assignment PIN_127 -to gpio_io[14]
+set_location_assignment PIN_128 -to gpio_io[15]
+
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
+set_global_assignment -name SOURCE_FILE io/uart/include/uart.h
+set_global_assignment -name SOURCE_FILE io/rom/include/rom.h
+set_global_assignment -name SOURCE_FILE io/gpio/include/gpio.h
+set_global_assignment -name SOURCE_FILE cpu/include/spm.h
+set_global_assignment -name SOURCE_FILE cpu/include/isa.h
+set_global_assignment -name SOURCE_FILE cpu/include/cpu.h
+set_global_assignment -name VERILOG_FILE top/lib/altera_dpram.v
+set_global_assignment -name VERILOG_FILE top/lib/altera_dcm.v
+set_global_assignment -name SOURCE_FILE io/timer/include/timer.h
+set_global_assignment -name VERILOG_INCLUDE_FILE top/include/nettype.h
+set_global_assignment -name VERILOG_FILE top/include/stddef.h
+set_global_assignment -name VERILOG_INCLUDE_FILE top/include/global_config.h
+set_global_assignment -name VERILOG_INCLUDE_FILE bus/include/bus.h
+set_global_assignment -name VERILOG_FILE bus/rtl/bus_slave_mux.v
+set_global_assignment -name VERILOG_FILE bus/rtl/bus_master_mux.v
+set_global_assignment -name VERILOG_FILE bus/rtl/bus_arbiter.v
+set_global_assignment -name VERILOG_FILE bus/rtl/bus_addr_dec.v
+set_global_assignment -name VERILOG_FILE bus/rtl/bus.v
+set_global_assignment -name VERILOG_FILE io/uart/rtl/uart_tx.v
+set_global_assignment -name VERILOG_FILE io/uart/rtl/uart_rx.v
+set_global_assignment -name VERILOG_FILE io/uart/rtl/uart_ctrl.v
+set_global_assignment -name VERILOG_FILE io/uart/rtl/uart.v
+set_global_assignment -name VERILOG_FILE io/rom/rtl/rom.v
+set_global_assignment -name VERILOG_FILE io/gpio/rtl/gpio.v
+set_global_assignment -name VERILOG_FILE io/timer/rtl/timer.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/spm.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/mem_stage.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/mem_reg.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/mem_ctrl.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/if_stage.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/if_reg.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/id_stage.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/id_reg.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/gpr.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/ex_stage.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/ex_reg.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/decoder.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/ctrl.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/cpu.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/bus_if.v
+set_global_assignment -name VERILOG_FILE cpu/rtl/alu.v
+set_global_assignment -name VERILOG_FILE top/rtl/clk_gen.v
+set_global_assignment -name VERILOG_FILE top/rtl/chip_top.v
+set_global_assignment -name VERILOG_FILE top/rtl/chip.v
+set_global_assignment -name QIP_FILE top/lib/altera_dcm.qip
+set_global_assignment -name QIP_FILE top/lib/altera_sprom.qip
+set_global_assignment -name MIF_FILE top/lib/sprom.mif
+set_global_assignment -name QIP_FILE top/lib/altera_dpram.qip
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
