@@ -1,4 +1,4 @@
 azpr_cpu
 ========
 
-使用altera FPGA制作一个多流水线CPU单片机
+Verilog练习项目：使用altera FPGA制作一个多流水线CPU单片机
