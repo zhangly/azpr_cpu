@@ -15,7 +15,7 @@ FPGA芯片：Altera Cyclone IV E
 
 目录说明：
 
-rtl/           项目Verilog源代码目录
+rtl/           项目Verilog源代码目录,顶层模块为chip_top.v
 
 doc/           设计文档目录
 
