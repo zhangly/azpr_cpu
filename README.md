@@ -5,13 +5,13 @@ azpr_cpu
 
 Verilog入门项目：使用Altera FPGA芯片制作一个采用流水线机制的CPU单片机
 
-开发环境：Quartus II 11.2
+>开发环境：Quartus II 11.2
 
-FPGA芯片：Altera Cyclone IV E
+>FPGA芯片：Altera Cyclone IV E
 
-引脚约束：开发板 <http://item.taobao.com/item.htm?id=35911884243>
+>引脚约束：开发板 <http://item.taobao.com/item.htm?id=35911884243>
 
-占用芯片资源规模：4000 个逻辑单元， 200,000 bit RAM  
+>占用芯片资源规模：4000 个逻辑单元， 200,000 bit RAM  
 
 #目录说明：
 
