@@ -12,7 +12,7 @@ FPGA芯片：Altera Cyclone IV E
 引脚约束：开发板 <http://item.taobao.com/item.htm?id=35911884243>
 
 占用芯片资源规模：4000 个逻辑单元， 200,000 bit RAM  
---------
+
 #目录说明：
 
 `rtl/     `           项目Verilog源代码目录,顶层模块为chip_top.v  
