@@ -15,9 +15,9 @@ FPGA芯片：Altera Cyclone IV E
 
 目录说明：
 
-**rtl/     **           项目Verilog源代码目录,顶层模块为chip_top.v  
-**doc/     **           设计文档目录  
-**azpr_asm/**           运行在目标cpu上的汇编代码示例及编译器 
+`rtl/     `           项目Verilog源代码目录,顶层模块为chip_top.v  
+`doc/     `           设计文档目录  
+`azpr_asm/`           运行在目标cpu上的汇编代码示例及编译器 
 
 注1：原始项目来自《CPU自制入门》，从Xilinx芯片迁移到采用Altera芯片的开发板
 
