@@ -1,8 +1,8 @@
-;;; 1、编译：azprasm led.asm -o led.bin --coe led.coe
-;;; 2、手工将Xilinx FPGA的coe文件转换为Altera FPGA的mif格式作为ROM初始化数据文件 sprom16.mif
-;;; 3、开发板综合时，将sprom16.mif作为ROM的初始化数据文件
+;;; 串口程序加载器 
+;;; 1、编译：azprasm loader.asm -o loader.bin --coe loader.coe
+;;; 2、手工将Xilinx FPGA的coe文件转换为Altera FPGA的mif格式作为ROM初始化数据文件loader16.mif
+;;; 3、开发板综合时，将loader16.mif作为ROM的初始化数据文件 
 
-;;; 定义 
 UART_BASE_ADDR_H	EQU		0x6000		;UART Base Address High
 UART_STATUS_OFFSET	EQU		0x0			;UART Status Register Offset
 UART_DATA_OFFSET	EQU		0x4			;UART Data Register Offset
@@ -23,36 +23,37 @@ XMODEM_DATA_SIZE	EQU		128
 
 
 	XORR	r0,r0,r0
-
-	ORI		r0,r1,high(CLEAR_BUFFER)	;ラベルCLEAR_BUFFERの上位16ビットをr1にセット
+; 将 CLEAR_BUFFER 子程序入口存入r1
+	ORI		r0,r1,high(CLEAR_BUFFER)	; 
 	SHLLI	r1,r1,16
-	ORI		r1,r1,low(CLEAR_BUFFER)		;ラベルCLEAR_BUFFERの下位16ビットをr1にセット
-
-	ORI		r0,r2,high(SEND_BYTE)		;ラベルSEND_BYTEの上位16ビットをr2にセット
+	ORI		r1,r1,low(CLEAR_BUFFER)		;
+; 将 SEND_BYTE 子程序入口存入r2
+	ORI		r0,r2,high(SEND_BYTE)		;
 	SHLLI	r2,r2,16
-	ORI		r2,r2,low(SEND_BYTE)		;ラベルSEND_BYTEの下位16ビットをr2にセット
-
-	ORI		r0,r3,high(RECV_BYTE)		;ラベルRECV_BYTEの上位16ビットをr3にセット
+	ORI		r2,r2,low(SEND_BYTE)		;
+; 将 RECV_BYTE 子程序入口存入r3
+	ORI		r0,r3,high(RECV_BYTE)		;
 	SHLLI	r3,r3,16
-	ORI		r3,r3,low(RECV_BYTE)		;ラベルRECV_BYTEの下位16ビットをr3にセット
-
-	ORI 	r0,r4,high(WAIT_PUSH_SW)	;ラベルWAIT_PUSH_SWの上位16ビットをr4にセット
+	ORI		r3,r3,low(RECV_BYTE)		;
+; 将 WAIT_PUSH_SW 子程序入口存入r4
+	ORI 	r0,r4,high(WAIT_PUSH_SW)	;
 	SHLLI	r4,r4,16
-	ORI		r4,r4,low(WAIT_PUSH_SW)		;ラベルWAIT_PUSH_SWの下位16ビットをr4にセット
+	ORI		r4,r4,low(WAIT_PUSH_SW)		;
 
-;;; UARTのバッファクリア
-	CALL	r1							;CLEAR_BUFFER呼び出し
+;;; 清空UART缓存
+	CALL	r1							; 调用 CLEAR_BUFFER 子程序
 	ANDR	r0,r0,r0					;NOP
+	
+;;; 通过gpio_out，点亮所有LED（18位）
+	ORI		r0,r20,GPIO_BASE_ADDR_H		;GPIO Base Address写入r20
+	SHLLI	r20,r20,16					;左移16位，即设为r20的高位
+	ORI		r0,r21,0x2					;
+	SHLLI	r21,r21,16					;左移16位，即r21的高16位设为0x2
+	ORI		r21,r21,0xFFFF				;设置r21的低16位为0xFFFF
+	STW		r20,r21,GPIO_OUT_OFFSET		;将r21值输出到GPIO Output Port
 
-	ORI		r0,r20,GPIO_BASE_ADDR_H		;GPIO Base Address上位16ビットをr20にセット
-	SHLLI	r20,r20,16					;16ビット左シフト
-	ORI		r0,r21,0x2					;出力データを上位16ビットをr21にセット
-	SHLLI	r21,r21,16					;16ビット左シフト
-	ORI		r21,r21,0xFFFF				;出力データを下位16ビットをr21にセット
-	STW		r20,r21,GPIO_OUT_OFFSET		;GPIO Output Portに出力データを書き込む
-
-;; Wait Push Switch
-	CALL	r4
+;; 等待任按一键
+	CALL	r4                          ;调用 WAIT_PUSH_SW 子程序
 	ANDR	r0, r0, r0
 
 ;; NAK送信
@@ -253,4 +254,3 @@ _WAIT_PUSH_SW_OFF:
 _WAIT_PUSH_SW_RETURN:
 	JMP		r31
 	ANDR	r0,r0,r0					;NOP
-
