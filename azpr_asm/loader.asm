@@ -1,7 +1,7 @@
 ;;; 串口程序加载器 
 ;;; 1、编译：azprasm loader.asm -o loader.bin --coe loader.coe
 ;;; 2、手工将Xilinx FPGA的coe文件转换为Altera FPGA的mif格式作为ROM初始化数据文件loader16.mif
-;;; 3、开发板综合时，将loader16.mif作为ROM的初始化数据文件 
+;;; 3、开发板综合时，将loader16.mif作为ROM的初始化数据文件  
 
 UART_BASE_ADDR_H	EQU		0x6000		;UART Base Address High
 UART_STATUS_OFFSET	EQU		0x0			;UART Status Register Offset
