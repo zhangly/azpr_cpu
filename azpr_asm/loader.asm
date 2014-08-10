@@ -42,14 +42,14 @@ XMODEM_DATA_SIZE	EQU		128
 	CALL	r1							;调用 CLEAR_BUFFER
 	ANDR	r0,r0,r0					;NOP
 ;;; 点亮所有LED
-	ORI		r0,r20,GPIO_BASE_ADDR_H		;GPIO Base Address上位16ビットをr20にセット
-	SHLLI	r20,r20,16					;16ビット左シフト
-	ORI		r0,r21,0x2					;出力データを上位16ビットをr21にセット
-	SHLLI	r21,r21,16					;16ビット左シフト
-	ORI		r21,r21,0xFFFF				;出力データを下位16ビットをr21にセット
-	STW		r20,r21,GPIO_OUT_OFFSET		;GPIO Output Portに出力データを書き込む
+	ORI		r0,r20,GPIO_BASE_ADDR_H		;GPIO Base Address赋给r20
+	SHLLI	r20,r20,16					;r20左移16位
+	ORI		r0,r21,0x2					;
+	SHLLI	r21,r21,16					;r21左移16位，即高位置为0x2
+	ORI		r21,r21,0xFFFF				;r21低位置为0xFFFF
+	STW		r20,r21,GPIO_OUT_OFFSET		;将r21写入GPIO Output Port
 
-;; Wait Push Switch
+;; 等待任按一键
 	CALL	r4
 	ANDR	r0, r0, r0
 
