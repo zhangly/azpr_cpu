@@ -1,6 +1,6 @@
 azpr_cpu
 ========
-本项目为量化投资领域想用FPGA装逼的童鞋作点好事，零基础学FPGA至少能加速1个月的学习进度，详见本项目wiki。
+本项目为量化投资领域想用FPGA装逼的童鞋作点好事，零基础学FPGA至少能加速1个月的学习进度，详见[本项目wiki](https://code.csdn.net/blazebird/azpr-cpu/wikis)。
 ========
 
 Verilog入门项目：使用Altera FPGA芯片制作一个采用流水线机制的CPU单片机
