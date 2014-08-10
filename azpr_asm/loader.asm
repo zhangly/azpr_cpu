@@ -56,83 +56,83 @@ XMODEM_DATA_SIZE	EQU		128
 	CALL	r4
 	ANDR	r0, r0, r0
 
-;; NAK送信
-	ORI		r0,r16,XMODEM_NAK			;r16にNAKをセット
-	CALL	r2							;SEND_BYTE呼び出し
+;; 发送NAK
+	ORI		r0,r16,XMODEM_NAK			;将r16设为NAK
+	CALL	r2							;SEND_BYTE
 	ANDR	r0,r0,r0					;NOP
 
 	XORR	r5,r5,r5
-;; ブロックの先頭を受信する
-;; 受信待ち
+;; 接收数据块的头信息
+;; 等待接收
 RECV_HEADER:
-	CALL	r3							;RECV_BYTE呼び出し
+	CALL	r3							;RECV_BYTE
 	ANDR	r0,r0,r0					;NOP
 
-;; 受信データ
-	ORI		r0,r6,XMODEM_SOH			;r6にSOHをセット
+;; 接收数据
+	ORI		r0,r6,XMODEM_SOH			;将r6设为SOH
 	BE		r16,r6,RECV_SOH
 	ANDR	r0,r0,r0					;NOP
 
 ;; EOT
-;; ACK送信
-	ORI		r0,r16,XMODEM_ACK			;r16にACKをセット
-	CALL	r2							;SEND_BYTE呼び出し
+;; 发送ACK
+	ORI		r0,r16,XMODEM_ACK			;将r16设为ACK
+	CALL	r2							;SEND_BYTE
 	ANDR	r0,r0,r0					;NOP
 
 ;; jump to spm
-	ORI		r0,r6,SPM_BASE_ADDR_H		;SPM Base Address上位16ビットをr6にセット
+	ORI		r0,r6,SPM_BASE_ADDR_H		;将SPM Base Address高16位置入r6
 	SHLLI	r6,r6,16
 
-	JMP		r6							;SPMのプログラムを実行する
+	JMP		r6							;执行SPM中的程序
 	ANDR	r0,r0,r0					;NOP
 
 ;; SOH
 RECV_SOH:
-;; BN受信
-	CALL	r3							;RECV_BYTE呼び出し
+;; 接收BN
+	CALL	r3							;RECV_BYTE
 	ANDR	r0,r0,r0					;NOP
-	ORR		r0,r16,r7					;r7に受信データBNをセット
+	ORR		r0,r16,r7					;将r7设为收到的BN
 
-;; BNC受信
-	CALL	r3							;RECV_BYTE呼び出し
+;; 接收BNC
+	CALL	r3							;RECV_BYTE
 	ANDR	r0,r0,r0					;NOP
-	ORR		r0,r16,r8					;r8に受信データBNCをセット
+	ORR		r0,r16,r8					;将r8设为收到的BNC
 
 	ORI		r0,r9,XMODEM_DATA_SIZE
-	XORR	r10,r10,r10					;r10をクリア
-	XORR	r11,r11,r11					;r11をクリア
-
-;; 1ブロック受信
+	XORR	r10,r10,r10					;清除r10
+	XORR	r11,r11,r11					;清除r11
+	
+;; 接收一块数据
 ; byte0
 READ_BYTE0:
-	CALL	r3							;RECV_BYTE呼び出し
+	CALL	r3							;RECV_BYTE
 	ANDR	r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
-	SHLLI	r16,r16,24					;24bit左シフト
+	SHLLI	r16,r16,24					;左移24bit
 	ORR		r0,r16,r12
 
 ; byte1
-	CALL	r3							;RECV_BYTE呼び出し
+	CALL	r3							;RECV_BYTE
 	ANDR	r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
-	SHLLI	r16,r16,16					;16bit左シフト
+	SHLLI	r16,r16,16					;左移16bit
 	ORR		r12,r16,r12
 
 ; byte2
-	CALL	r3							;RECV_BYTE呼び出し
+	CALL	r3							;RECV_BYTE
 	ORR		r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
-	SHLLI	r16,r16,8					;8bit左シフト
+	SHLLI	r16,r16,8					;左移8bit
 	ORR		r12,r16,r12
 
 ; byte3
-	CALL	r3							;RECV_BYTE呼び出し
+	CALL	r3							;RECV_BYTE
 	ORR		r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
 	ORR		r12,r16,r12
 
 ; write memory
-	ORI		r0,r13,SPM_BASE_ADDR_H		;SPM Base Address上位16ビットをr13にセット
+	ORI		r0,r13,SPM_BASE_ADDR_H		;SPM Base Address存入r13的高16位
 	SHLLI	r13,r13,16
 
 	SHLLI	r5,r14,7
@@ -144,37 +144,37 @@ READ_BYTE0:
 	BNE		r10,r9,READ_BYTE0
 	ANDR	r0,r0,r0					;NOP
 
-;; CS受信
-	CALL	r3							;RECV_BYTE呼び出し
+;; 接收CS
+	CALL	r3							;RECV_BYTE
 	ANDR	r0,r0,r0					;NOP
 	ORR		r0,r16,r12
 
 ;; Error Check
 	ADDUR	r7,r8,r7
-	ORI		r0,r13,0xFF					;r13に0xFFをセット
-	BNE		r7,r13,SEND_NAK				;BN+BNCが0xFFでなければNAK送信
+	ORI		r0,r13,0xFF					;将r13置为0xFF
+	BNE		r7,r13,SEND_NAK				;如果BN+BNC不等于xFF则发送NAK
 	ANDR	r0,r0,r0					;NOP
 
-	ANDI	r11,r11,0xFF				;r11に0xFFをセット
-	BNE		r12,r11,SEND_NAK			;check sumが正しいか
+	ANDI	r11,r11,0xFF				;将r11置为0xFF
+	BNE		r12,r11,SEND_NAK			;判断check sum是否正确
 	ANDR	r0,r0,r0					;NOP
 
-;; ACK送信
+;; 发送ACK
 SEND_ACK:
-	ORI		r0,r16,XMODEM_ACK			;r16にACKをセット
-	CALL	r2							;SEND_BYTE呼び出し
+	ORI		r0,r16,XMODEM_ACK			;将r16置为ACK
+	CALL	r2							;SEND_BYTE
 	ANDR	r0,r0,r0					;NOP
 	ADDUI	r5,r5,1
 	BNE		r0,r0,RETURN_RECV_HEADER
 	ANDR	r0,r0,r0					;NOP
 
-;; NAK送信
+;; 发送NAK
 SEND_NAK:
-	ORI		r0,r16,XMODEM_NAK			;r16にNAKをセット
-	CALL	r2							;SEND_BYTE呼び出し
+	ORI		r0,r16,XMODEM_NAK			;将r16置为NAK
+	CALL	r2							;SEND_BYTE
 	ANDR	r0,r0,r0					;NOP
 
-;; RECV_HEADERに戻る
+;; 返回RECV_HEADER
 RETURN_RECV_HEADER:
 	BE		r0,r0,RECV_HEADER
 	ANDR	r0,r0,r0					;NOP
