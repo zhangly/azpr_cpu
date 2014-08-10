@@ -1,0 +1,98 @@
+-- Copyright (C) 1991-2011 Altera Corporation
+-- Your use of Altera Corporation's design tools, logic functions 
+-- and other software and tools, and its AMPP partner logic 
+-- functions, and any output files from any of the foregoing 
+-- (including device programming or simulation files), and any 
+-- associated documentation or information are expressly subject 
+-- to the terms and conditions of the Altera Program License 
+-- Subscription Agreement, Altera MegaCore Function License 
+-- Agreement, or other applicable license agreement, including, 
+-- without limitation, that your use is for the sole purpose of 
+-- programming logic devices manufactured by Altera and sold by 
+-- Altera or its authorized distributors.  Please refer to the 
+-- applicable agreement for further details.
+
+-- Quartus II generated Memory Initialization File (.mif)
+
+WIDTH=32;
+DEPTH=256;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+1	:	10000000	;
+2	:	0c010000	;
+3	:	3c210010	;
+4	:	0c2100bc	;
+5	:	0c020000	;
+6	:	3c420010	;
+7	:	0c4200f4	;
+8	:	54200000	;
+9	:	00000000	;
+10	:	0c100048	;
+11	:	54400000	;
+12	:	00000000	;
+13	:	0c100065	;
+14	:	54400000	;
+15	:	00000000	;
+16	:	0c10006c	;
+17	:	54400000	;
+18	:	00000000	;
+19	:	0c10006c	;
+20	:	54400000	;
+21	:	00000000	;
+22	:	0c10006f	;
+23	:	54400000	;
+24	:	00000000	;
+25	:	0c10002c	;
+26	:	54400000	;
+27	:	00000000	;
+28	:	0c100077	;
+29	:	54400000	;
+30	:	00000000	;
+31	:	0c10006f	;
+32	:	54400000	;
+33	:	00000000	;
+34	:	0c100072	;
+35	:	54400000	;
+36	:	00000000	;
+37	:	0c10006c	;
+38	:	54400000	;
+39	:	00000000	;
+40	:	0c100064	;
+41	:	54400000	;
+42	:	00000000	;
+43	:	0c10002e	;
+44	:	54400000	;
+45	:	00000000	;
+46	:	4000ffff	;
+47	:	00000000	;
+48	:	0c106000	;
+49	:	3e100010	;
+50	:	5a110000	;
+51	:	06310001	;
+52	:	40110007	;
+53	:	00000000	;
+54	:	5a110004	;
+55	:	5a110000	;
+56	:	16310001	;
+57	:	5e110000	;
+58	:	4400fff7	;
+59	:	00000000	;
+60	:	53e00000	;
+61	:	00000000	;
+62	:	0c116000	;
+63	:	3e310010	;
+64	:	5e300004	;
+65	:	5a320000	;
+66	:	06520002	;
+67	:	4012fffd	;
+68	:	00000000	;
+69	:	5a320000	;
+70	:	16520002	;
+71	:	5e320000	;
+72	:	53e00000	;
+73	:	00000000	;
+	[74..255]  :   00000000;
+END;
