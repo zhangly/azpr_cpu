@@ -1,3 +1,5 @@
+;;; 程序加载器
+
 ;;; 符号定义
 UART_BASE_ADDR_H	EQU		0x6000		;UART Base Address High
 UART_STATUS_OFFSET	EQU		0x0			;UART Status Register Offset
@@ -19,27 +21,27 @@ XMODEM_DATA_SIZE	EQU		128
 
 
 	XORR	r0,r0,r0
-
-	ORI		r0,r1,high(CLEAR_BUFFER)	;ラベルCLEAR_BUFFERの上位16ビットをr1にセット
+;;;保存 CLEAR_BUFFER 子程序地址到 r1
+	ORI		r0,r1,high(CLEAR_BUFFER)	;
 	SHLLI	r1,r1,16
-	ORI		r1,r1,low(CLEAR_BUFFER)		;ラベルCLEAR_BUFFERの下位16ビットをr1にセット
-
-	ORI		r0,r2,high(SEND_BYTE)		;ラベルSEND_BYTEの上位16ビットをr2にセット
+	ORI		r1,r1,low(CLEAR_BUFFER)		;
+;;;保存 SEND_BYTE 子程序地址到 r2
+	ORI		r0,r2,high(SEND_BYTE)		;
 	SHLLI	r2,r2,16
-	ORI		r2,r2,low(SEND_BYTE)		;ラベルSEND_BYTEの下位16ビットをr2にセット
-
-	ORI		r0,r3,high(RECV_BYTE)		;ラベルRECV_BYTEの上位16ビットをr3にセット
+	ORI		r2,r2,low(SEND_BYTE)		;
+;;;保存 RECV_BYTE 子程序地址到 r3
+	ORI		r0,r3,high(RECV_BYTE)		;
 	SHLLI	r3,r3,16
-	ORI		r3,r3,low(RECV_BYTE)		;ラベルRECV_BYTEの下位16ビットをr3にセット
-
-	ORI 	r0,r4,high(WAIT_PUSH_SW)	;ラベルWAIT_PUSH_SWの上位16ビットをr4にセット
+	ORI		r3,r3,low(RECV_BYTE)		;
+;;;保存 WAIT_PUSH_SW 子程序地址到 r4
+	ORI 	r0,r4,high(WAIT_PUSH_SW)	;
 	SHLLI	r4,r4,16
-	ORI		r4,r4,low(WAIT_PUSH_SW)		;ラベルWAIT_PUSH_SWの下位16ビットをr4にセット
+	ORI		r4,r4,low(WAIT_PUSH_SW)		;
 
-;;; UARTのバッファクリア
-	CALL	r1							;CLEAR_BUFFER呼び出し
+;;; 清空UART缓存
+	CALL	r1							;调用 CLEAR_BUFFER
 	ANDR	r0,r0,r0					;NOP
-
+;;; 点亮所有LED
 	ORI		r0,r20,GPIO_BASE_ADDR_H		;GPIO Base Address上位16ビットをr20にセット
 	SHLLI	r20,r20,16					;16ビット左シフト
 	ORI		r0,r21,0x2					;出力データを上位16ビットをr21にセット
