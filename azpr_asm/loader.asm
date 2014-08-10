@@ -179,67 +179,70 @@ RETURN_RECV_HEADER:
 	BE		r0,r0,RECV_HEADER
 	ANDR	r0,r0,r0					;NOP
 
+;;;清除缓存子程序	
 CLEAR_BUFFER:
-	ORI		r0,r16,UART_BASE_ADDR_H		;UART Base Address上位16ビットをr16にセット
+	ORI		r0,r16,UART_BASE_ADDR_H		;UART Base Address高16置入r16
 	SHLLI	r16,r16,16
 
 _CHECK_UART_STATUS:
-	LDW		r16,r17,UART_STATUS_OFFSET	;STATUSを取得
+	LDW		r16,r17,UART_STATUS_OFFSET	;获取STATUS
 
 	ANDI	r17,r17,UART_RX_INTR_MASK
-	BE		r0,r17,_CLEAR_BUFFER_RETURN	;Receive Interrupt bitが立っていれば_CLEAR_BUFFER_RETURNを実行
+	BE		r0,r17,_CLEAR_BUFFER_RETURN	;如果接收中断位为0，则跳转到_CLEAR_BUFFER_RETURN
 	ANDR	r0,r0,r0					;NOP
 
 _READ_DATA:
-	LDW		r16,r17,UART_DATA_OFFSET	;受信データを読んでバッファをクリアする
+	LDW		r16,r17,UART_DATA_OFFSET	;清除缓存区读到的数据
 
-	LDW		r16,r17,UART_STATUS_OFFSET	;STATUSを取得
+	LDW		r16,r17,UART_STATUS_OFFSET	;获取STATUS
 	XORI	r17,r17,UART_RX_INTR_MASK
-	STW		r6,r17,UART_STATUS_OFFSET	;Receive Interrupt bitをクリア
+	STW		r6,r17,UART_STATUS_OFFSET	;Receive Interrupt bit清除
 
-	BNE		r0,r0,_CHECK_UART_STATUS	;_CHECK_UART_STATUSに戻る
+	BNE		r0,r0,_CHECK_UART_STATUS	;返回 _CHECK_UART_STATUS
 	ANDR	r0,r0,r0					;NOP
 _CLEAR_BUFFER_RETURN:
-	JMP		r31							;呼び出し元に戻る
+	JMP		r31							;返回到调用者
 	ANDR	r0,r0,r0					;NOP
 
-
+;;;发送子程序
 SEND_BYTE:
-	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address上位16ビットをr17にセット
+	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address高16位置入r17
 	SHLLI	r17,r17,16
-	STW		r17,r16,UART_DATA_OFFSET	;r16を送信する
+	STW		r17,r16,UART_DATA_OFFSET	;发送r16
 
 _WAIT_SEND_DONE:
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
+	LDW		r17,r18,UART_STATUS_OFFSET	;获取STATUS
 	ANDI	r18,r18,UART_TX_INTR_MASK
-	BE		r0,r18,_WAIT_SEND_DONE		;Transmit Interrupt bitが立っていなければ_WAIT_SEND_DONEを実行
+	BE		r0,r18,_WAIT_SEND_DONE		;如果发送中断位为0,则跳转到_WAIT_SEND_DONE
 	ANDR	r0,r0,r0					;NOP
 
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
+	LDW		r17,r18,UART_STATUS_OFFSET	;获取STATUS
 	XORI	r18,r18,UART_TX_INTR_MASK
-	STW		r17,r18,UART_STATUS_OFFSET	;Transmit Interrupt bitをクリア
+	STW		r17,r18,UART_STATUS_OFFSET	;Transmit Interrupt bit清除
 
-	JMP		r31							;呼び出し元に戻る
+	JMP		r31							;返回到子程序调用点
 	ANDR	r0,r0,r0					;NOP
 
+;;;接收子程序	
 RECV_BYTE:
-	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address上位16ビットをr17にセット
+	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address高16位置入r17
 	SHLLI	r17,r17,16
 
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
+	LDW		r17,r18,UART_STATUS_OFFSET	;获取STATUS到r18
 	ANDI	r18,r18,UART_RX_INTR_MASK
-	BE		r0,r18,RECV_BYTE			;Receive Interrupt bitが立っていればRECV_BYTEを実行
+	BE		r0,r18,RECV_BYTE			;如果接收中断位为0，则跳转到RECV_BYTE
 	ANDR	r0,r0,r0					;NOP
 
-	LDW		r17,r16,UART_DATA_OFFSET	;受信データを読む
+	LDW		r17,r16,UART_DATA_OFFSET	;读取接收到的数据
 
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
+	LDW		r17,r18,UART_STATUS_OFFSET	;获取STATUS
 	XORI	r18,r18,UART_RX_INTR_MASK
-	STW		r17,r18,UART_STATUS_OFFSET	;Receive Interrupt bitをクリア
+	STW		r17,r18,UART_STATUS_OFFSET	;清除Receive Interrupt bit
 
-	JMP		r31							;呼び出し元に戻る
+	JMP		r31							;返回到子程序调用点
 	ANDR	r0,r0,r0					;NOP
 
+;;;等待按一键子程序	
 WAIT_PUSH_SW:
 	ORI		r0,r16,GPIO_BASE_ADDR_H
 	SHLLI	r16,r16,16
