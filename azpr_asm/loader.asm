@@ -1,4 +1,4 @@
-;;; 符号定义
+;;; 符号定义 
 UART_BASE_ADDR_H	EQU		0x6000		;UART Base Address High
 UART_STATUS_OFFSET	EQU		0x0			;UART Status Register Offset
 UART_DATA_OFFSET	EQU		0x4			;UART Data Register Offset
