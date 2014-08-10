@@ -1,4 +1,8 @@
-;;; 僔儞儃儖偺掕媊
+;;; 串口程序加载器 V1.0
+;;; 1、编译：azprasm loader.asm -o loader.bin --coe loader.coe
+;;; 2、手工将Xilinx FPGA的coe文件转换为Altera FPGA的mif格式作为ROM初始化数据文件loader16.mif
+;;; 3、开发板综合时，将loader16.mif作为ROM的初始化数据文件
+
 UART_BASE_ADDR_H	EQU		0x6000		;UART Base Address High
 UART_STATUS_OFFSET	EQU		0x0			;UART Status Register Offset
 UART_DATA_OFFSET	EQU		0x4			;UART Data Register Offset
@@ -20,114 +24,114 @@ XMODEM_DATA_SIZE	EQU		128
 
 	XORR	r0,r0,r0
 
-	ORI		r0,r1,high(CLEAR_BUFFER)	;儔儀儖CLEAR_BUFFER偺忋埵16價僢僩傪r1偵僙僢僩
+	ORI		r0,r1,high(CLEAR_BUFFER)	;ラベルCLEAR_BUFFERの上位16ビットをr1にセット
 	SHLLI	r1,r1,16
-	ORI		r1,r1,low(CLEAR_BUFFER)		;儔儀儖CLEAR_BUFFER偺壓埵16價僢僩傪r1偵僙僢僩
+	ORI		r1,r1,low(CLEAR_BUFFER)		;ラベルCLEAR_BUFFERの下位16ビットをr1にセット
 
-	ORI		r0,r2,high(SEND_BYTE)		;儔儀儖SEND_BYTE偺忋埵16價僢僩傪r2偵僙僢僩
+	ORI		r0,r2,high(SEND_BYTE)		;ラベルSEND_BYTEの上位16ビットをr2にセット
 	SHLLI	r2,r2,16
-	ORI		r2,r2,low(SEND_BYTE)		;儔儀儖SEND_BYTE偺壓埵16價僢僩傪r2偵僙僢僩
+	ORI		r2,r2,low(SEND_BYTE)		;ラベルSEND_BYTEの下位16ビットをr2にセット
 
-	ORI		r0,r3,high(RECV_BYTE)		;儔儀儖RECV_BYTE偺忋埵16價僢僩傪r3偵僙僢僩
+	ORI		r0,r3,high(RECV_BYTE)		;ラベルRECV_BYTEの上位16ビットをr3にセット
 	SHLLI	r3,r3,16
-	ORI		r3,r3,low(RECV_BYTE)		;儔儀儖RECV_BYTE偺壓埵16價僢僩傪r3偵僙僢僩
+	ORI		r3,r3,low(RECV_BYTE)		;ラベルRECV_BYTEの下位16ビットをr3にセット
 
-	ORI 	r0,r4,high(WAIT_PUSH_SW)	;儔儀儖WAIT_PUSH_SW偺忋埵16價僢僩傪r4偵僙僢僩
+	ORI 	r0,r4,high(WAIT_PUSH_SW)	;ラベルWAIT_PUSH_SWの上位16ビットをr4にセット
 	SHLLI	r4,r4,16
-	ORI		r4,r4,low(WAIT_PUSH_SW)		;儔儀儖WAIT_PUSH_SW偺壓埵16價僢僩傪r4偵僙僢僩
+	ORI		r4,r4,low(WAIT_PUSH_SW)		;ラベルWAIT_PUSH_SWの下位16ビットをr4にセット
 
-;;; UART偺僶僢僼傽僋儕傾
-	CALL	r1							;CLEAR_BUFFER屇傃弌偟
+;;; UARTのバッファクリア
+	CALL	r1							;CLEAR_BUFFER呼び出し
 	ANDR	r0,r0,r0					;NOP
 
-	ORI		r0,r20,GPIO_BASE_ADDR_H		;GPIO Base Address忋埵16價僢僩傪r20偵僙僢僩
-	SHLLI	r20,r20,16					;16價僢僩嵍僔僼僩
-	ORI		r0,r21,0x2					;弌椡僨乕僞傪忋埵16價僢僩傪r21偵僙僢僩
-	SHLLI	r21,r21,16					;16價僢僩嵍僔僼僩
-	ORI		r21,r21,0xFFFF				;弌椡僨乕僞傪壓埵16價僢僩傪r21偵僙僢僩
-	STW		r20,r21,GPIO_OUT_OFFSET		;GPIO Output Port偵弌椡僨乕僞傪彂偒崬傓
+	ORI		r0,r20,GPIO_BASE_ADDR_H		;GPIO Base Address上位16ビットをr20にセット
+	SHLLI	r20,r20,16					;16ビット左シフト
+	ORI		r0,r21,0x2					;出力データを上位16ビットをr21にセット
+	SHLLI	r21,r21,16					;16ビット左シフト
+	ORI		r21,r21,0xFFFF				;出力データを下位16ビットをr21にセット
+	STW		r20,r21,GPIO_OUT_OFFSET		;GPIO Output Portに出力データを書き込む
 
 ;; Wait Push Switch
 	CALL	r4
 	ANDR	r0, r0, r0
 
-;; NAK憲怣
-	ORI		r0,r16,XMODEM_NAK			;r16偵NAK傪僙僢僩
-	CALL	r2							;SEND_BYTE屇傃弌偟
+;; NAK送信
+	ORI		r0,r16,XMODEM_NAK			;r16にNAKをセット
+	CALL	r2							;SEND_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 
 	XORR	r5,r5,r5
-;; 僽儘僢僋偺愭摢傪庴怣偡傞
-;; 庴怣懸偪
+;; ブロックの先頭を受信する
+;; 受信待ち
 RECV_HEADER:
-	CALL	r3							;RECV_BYTE屇傃弌偟
+	CALL	r3							;RECV_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 
-;; 庴怣僨乕僞
-	ORI		r0,r6,XMODEM_SOH			;r6偵SOH傪僙僢僩
+;; 受信データ
+	ORI		r0,r6,XMODEM_SOH			;r6にSOHをセット
 	BE		r16,r6,RECV_SOH
 	ANDR	r0,r0,r0					;NOP
 
 ;; EOT
-;; ACK憲怣
-	ORI		r0,r16,XMODEM_ACK			;r16偵ACK傪僙僢僩
-	CALL	r2							;SEND_BYTE屇傃弌偟
+;; ACK送信
+	ORI		r0,r16,XMODEM_ACK			;r16にACKをセット
+	CALL	r2							;SEND_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 
 ;; jump to spm
-	ORI		r0,r6,SPM_BASE_ADDR_H		;SPM Base Address忋埵16價僢僩傪r6偵僙僢僩
+	ORI		r0,r6,SPM_BASE_ADDR_H		;SPM Base Address上位16ビットをr6にセット
 	SHLLI	r6,r6,16
 
-	JMP		r6							;SPM偺僾儘僌儔儉傪幚峴偡傞
+	JMP		r6							;SPMのプログラムを実行する
 	ANDR	r0,r0,r0					;NOP
 
 ;; SOH
 RECV_SOH:
-;; BN庴怣
-	CALL	r3							;RECV_BYTE屇傃弌偟
+;; BN受信
+	CALL	r3							;RECV_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
-	ORR		r0,r16,r7					;r7偵庴怣僨乕僞BN傪僙僢僩
+	ORR		r0,r16,r7					;r7に受信データBNをセット
 
-;; BNC庴怣
-	CALL	r3							;RECV_BYTE屇傃弌偟
+;; BNC受信
+	CALL	r3							;RECV_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
-	ORR		r0,r16,r8					;r8偵庴怣僨乕僞BNC傪僙僢僩
+	ORR		r0,r16,r8					;r8に受信データBNCをセット
 
 	ORI		r0,r9,XMODEM_DATA_SIZE
-	XORR	r10,r10,r10					;r10傪僋儕傾
-	XORR	r11,r11,r11					;r11傪僋儕傾
+	XORR	r10,r10,r10					;r10をクリア
+	XORR	r11,r11,r11					;r11をクリア
 
-;; 1僽儘僢僋庴怣
+;; 1ブロック受信
 ; byte0
 READ_BYTE0:
-	CALL	r3							;RECV_BYTE屇傃弌偟
+	CALL	r3							;RECV_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
-	SHLLI	r16,r16,24					;24bit嵍僔僼僩
+	SHLLI	r16,r16,24					;24bit左シフト
 	ORR		r0,r16,r12
 
 ; byte1
-	CALL	r3							;RECV_BYTE屇傃弌偟
+	CALL	r3							;RECV_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
-	SHLLI	r16,r16,16					;16bit嵍僔僼僩
+	SHLLI	r16,r16,16					;16bit左シフト
 	ORR		r12,r16,r12
 
 ; byte2
-	CALL	r3							;RECV_BYTE屇傃弌偟
+	CALL	r3							;RECV_BYTE呼び出し
 	ORR		r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
-	SHLLI	r16,r16,8					;8bit嵍僔僼僩
+	SHLLI	r16,r16,8					;8bit左シフト
 	ORR		r12,r16,r12
 
 ; byte3
-	CALL	r3							;RECV_BYTE屇傃弌偟
+	CALL	r3							;RECV_BYTE呼び出し
 	ORR		r0,r0,r0					;NOP
 	ADDUR	r11,r16,r11
 	ORR		r12,r16,r12
 
 ; write memory
-	ORI		r0,r13,SPM_BASE_ADDR_H		;SPM Base Address忋埵16價僢僩傪r13偵僙僢僩
+	ORI		r0,r13,SPM_BASE_ADDR_H		;SPM Base Address上位16ビットをr13にセット
 	SHLLI	r13,r13,16
 
 	SHLLI	r5,r14,7
@@ -139,100 +143,100 @@ READ_BYTE0:
 	BNE		r10,r9,READ_BYTE0
 	ANDR	r0,r0,r0					;NOP
 
-;; CS庴怣
-	CALL	r3							;RECV_BYTE屇傃弌偟
+;; CS受信
+	CALL	r3							;RECV_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 	ORR		r0,r16,r12
 
 ;; Error Check
 	ADDUR	r7,r8,r7
-	ORI		r0,r13,0xFF					;r13偵0xFF傪僙僢僩
-	BNE		r7,r13,SEND_NAK				;BN+BNC偑0xFF偱側偗傟偽NAK憲怣
+	ORI		r0,r13,0xFF					;r13に0xFFをセット
+	BNE		r7,r13,SEND_NAK				;BN+BNCが0xFFでなければNAK送信
 	ANDR	r0,r0,r0					;NOP
 
-	ANDI	r11,r11,0xFF				;r11偵0xFF傪僙僢僩
-	BNE		r12,r11,SEND_NAK			;check sum偑惓偟偄偐
+	ANDI	r11,r11,0xFF				;r11に0xFFをセット
+	BNE		r12,r11,SEND_NAK			;check sumが正しいか
 	ANDR	r0,r0,r0					;NOP
 
-;; ACK憲怣
+;; ACK送信
 SEND_ACK:
-	ORI		r0,r16,XMODEM_ACK			;r16偵ACK傪僙僢僩
-	CALL	r2							;SEND_BYTE屇傃弌偟
+	ORI		r0,r16,XMODEM_ACK			;r16にACKをセット
+	CALL	r2							;SEND_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 	ADDUI	r5,r5,1
 	BNE		r0,r0,RETURN_RECV_HEADER
 	ANDR	r0,r0,r0					;NOP
 
-;; NAK憲怣
+;; NAK送信
 SEND_NAK:
-	ORI		r0,r16,XMODEM_NAK			;r16偵NAK傪僙僢僩
-	CALL	r2							;SEND_BYTE屇傃弌偟
+	ORI		r0,r16,XMODEM_NAK			;r16にNAKをセット
+	CALL	r2							;SEND_BYTE呼び出し
 	ANDR	r0,r0,r0					;NOP
 
-;; RECV_HEADER偵栠傞
+;; RECV_HEADERに戻る
 RETURN_RECV_HEADER:
 	BE		r0,r0,RECV_HEADER
 	ANDR	r0,r0,r0					;NOP
 
 CLEAR_BUFFER:
-	ORI		r0,r16,UART_BASE_ADDR_H		;UART Base Address忋埵16價僢僩傪r16偵僙僢僩
+	ORI		r0,r16,UART_BASE_ADDR_H		;UART Base Address上位16ビットをr16にセット
 	SHLLI	r16,r16,16
 
 _CHECK_UART_STATUS:
-	LDW		r16,r17,UART_STATUS_OFFSET	;STATUS傪庢摼
+	LDW		r16,r17,UART_STATUS_OFFSET	;STATUSを取得
 
 	ANDI	r17,r17,UART_RX_INTR_MASK
-	BE		r0,r17,_CLEAR_BUFFER_RETURN	;Receive Interrupt bit偑棫偭偰偄傟偽_CLEAR_BUFFER_RETURN傪幚峴
+	BE		r0,r17,_CLEAR_BUFFER_RETURN	;Receive Interrupt bitが立っていれば_CLEAR_BUFFER_RETURNを実行
 	ANDR	r0,r0,r0					;NOP
 
 _READ_DATA:
-	LDW		r16,r17,UART_DATA_OFFSET	;庴怣僨乕僞傪撉傫偱僶僢僼傽傪僋儕傾偡傞
+	LDW		r16,r17,UART_DATA_OFFSET	;受信データを読んでバッファをクリアする
 
-	LDW		r16,r17,UART_STATUS_OFFSET	;STATUS傪庢摼
+	LDW		r16,r17,UART_STATUS_OFFSET	;STATUSを取得
 	XORI	r17,r17,UART_RX_INTR_MASK
-	STW		r6,r17,UART_STATUS_OFFSET	;Receive Interrupt bit傪僋儕傾
+	STW		r6,r17,UART_STATUS_OFFSET	;Receive Interrupt bitをクリア
 
-	BNE		r0,r0,_CHECK_UART_STATUS	;_CHECK_UART_STATUS偵栠傞
+	BNE		r0,r0,_CHECK_UART_STATUS	;_CHECK_UART_STATUSに戻る
 	ANDR	r0,r0,r0					;NOP
 _CLEAR_BUFFER_RETURN:
-	JMP		r31							;屇傃弌偟尦偵栠傞
+	JMP		r31							;呼び出し元に戻る
 	ANDR	r0,r0,r0					;NOP
 
 
 SEND_BYTE:
-	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address忋埵16價僢僩傪r17偵僙僢僩
+	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address上位16ビットをr17にセット
 	SHLLI	r17,r17,16
-	STW		r17,r16,UART_DATA_OFFSET	;r16傪憲怣偡傞
+	STW		r17,r16,UART_DATA_OFFSET	;r16を送信する
 
 _WAIT_SEND_DONE:
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUS傪庢摼
+	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
 	ANDI	r18,r18,UART_TX_INTR_MASK
-	BE		r0,r18,_WAIT_SEND_DONE		;Transmit Interrupt bit偑棫偭偰偄側偗傟偽_WAIT_SEND_DONE傪幚峴
+	BE		r0,r18,_WAIT_SEND_DONE		;Transmit Interrupt bitが立っていなければ_WAIT_SEND_DONEを実行
 	ANDR	r0,r0,r0					;NOP
 
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUS傪庢摼
+	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
 	XORI	r18,r18,UART_TX_INTR_MASK
-	STW		r17,r18,UART_STATUS_OFFSET	;Transmit Interrupt bit傪僋儕傾
+	STW		r17,r18,UART_STATUS_OFFSET	;Transmit Interrupt bitをクリア
 
-	JMP		r31							;屇傃弌偟尦偵栠傞
+	JMP		r31							;呼び出し元に戻る
 	ANDR	r0,r0,r0					;NOP
 
 RECV_BYTE:
-	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address忋埵16價僢僩傪r17偵僙僢僩
+	ORI		r0,r17,UART_BASE_ADDR_H		;UART Base Address上位16ビットをr17にセット
 	SHLLI	r17,r17,16
 
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUS傪庢摼
+	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
 	ANDI	r18,r18,UART_RX_INTR_MASK
-	BE		r0,r18,RECV_BYTE			;Receive Interrupt bit偑棫偭偰偄傟偽RECV_BYTE傪幚峴
+	BE		r0,r18,RECV_BYTE			;Receive Interrupt bitが立っていればRECV_BYTEを実行
 	ANDR	r0,r0,r0					;NOP
 
-	LDW		r17,r16,UART_DATA_OFFSET	;庴怣僨乕僞傪撉傓
+	LDW		r17,r16,UART_DATA_OFFSET	;受信データを読む
 
-	LDW		r17,r18,UART_STATUS_OFFSET	;STATUS傪庢摼
+	LDW		r17,r18,UART_STATUS_OFFSET	;STATUSを取得
 	XORI	r18,r18,UART_RX_INTR_MASK
-	STW		r17,r18,UART_STATUS_OFFSET	;Receive Interrupt bit傪僋儕傾
+	STW		r17,r18,UART_STATUS_OFFSET	;Receive Interrupt bitをクリア
 
-	JMP		r31							;屇傃弌偟尦偵栠傞
+	JMP		r31							;呼び出し元に戻る
 	ANDR	r0,r0,r0					;NOP
 
 WAIT_PUSH_SW:
